@@ -15,10 +15,6 @@
 
 ## 🎯 Problem Statement
 
-
-
-## 🎯 Problem Statement
-
 Clinical trial risk managers and site coordinators face difficulties in identifying protocol deviations, such as missed visits, incorrect dosing, and prohibited medications, across multiple trial sites. Our project aims to detect and classify these deviations, identify high-risk sites, and generate reports with recommended corrective actions to help prevent audit failures and delays in drug approval.
 
 
@@ -26,15 +22,9 @@ Clinical trial risk managers and site coordinators face difficulties in identify
 
 ## 💡 Solution
 
-> 
-## 💡 Solution
-
 We propose a Clinical Trial Risk Monitor that compares patient records with clinical trial protocol requirements to identify and classify protocol deviations. The system assesses site-level risk, highlights potential issues, and generates reports with recommended corrective and preventive actions (CAPA) to help risk managers address problems before audits.
 
 ---
-
-## ✨ Key Features
-
 
 ## ✨ Key Features
 
@@ -48,9 +38,6 @@ We propose a Clinical Trial Risk Monitor that compares patient records with clin
 
 - **Feature 5: CAPA Report Generation** — Generates reports with recommended corrective and preventive actions to help address identified issues.
 ---
-
-## 🛠️ Tech Stack
-
 
 ## 🛠️ Tech Stack
 
