@@ -96,29 +96,31 @@ bob-ai-hackathon/
 
 ---
 
-## 🖥️ Demo
+
+## 💻 Demo
 
 | Artifact | Link |
 |---|---|
-| 📹 Demo Video | [See demo/demo-video-link.txt](demo/demo-video-link.txt) |
-| 🌐 Live Demo | [See demo/live-demo-url.txt](demo/live-demo-url.txt) |
-| 🖼️ Screenshots | [See demo/screenshots/](demo/screenshots/) |
-| 📊 Presentation | [See presentation/slides.pdf](presentation/) |
+| Demo Video | Coming soon |
+| Live Demo | Not available yet |
+| Screenshots | Coming soon |
+| Presentation | Coming soon |
 
 ---
+
 
 ## ⚠️ Known Limitations
 
-> Be honest — judges appreciate transparency over overclaiming.
-
-- [Limitation 1: e.g., "Authentication is mocked — not production-ready"]
-- [Limitation 2: e.g., "Only tested on Chrome"]
-- [Limitation 3: e.g., "Feature X is scaffolded but not fully implemented"]
-
+- The system is a prototype and has not been validated for real clinical trial use.
+- Risk scores depend on the quality and completeness of the available data.
+- The system may not detect every type of protocol deviation.
+- Generated reports require review by qualified clinical trial professionals.
 ---
+
 
 ## 🏅 What We're Most Proud Of
 
-[Tell the judges what part of your submission is strongest and worth paying close attention to.]
-
----
+- Identifying an important real-world challenge in clinical trials.
+- Using AI to help detect protocol deviations and identify high-risk trial sites.
+- Designing a solution that helps risk managers understand potential issues more easily.
+- Collaborating as a team to develop an innovative solution using IBM BoB.
