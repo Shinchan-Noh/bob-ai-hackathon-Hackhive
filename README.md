@@ -17,26 +17,36 @@
 
 
 
-[Describe the real-world problem your project addresses. Be specific about who the user is and what pain point they face.]
+## 🎯 Problem Statement
+
+Clinical trial risk managers and site coordinators face difficulties in identifying protocol deviations, such as missed visits, incorrect dosing, and prohibited medications, across multiple trial sites. Our project aims to detect and classify these deviations, identify high-risk sites, and generate reports with recommended corrective actions to help prevent audit failures and delays in drug approval.
+
 
 ---
 
 ## 💡 Solution
 
-> In 2–3 sentences: What did you build? How does it solve the problem above?
+> 
+## 💡 Solution
 
-[Describe your solution clearly. Explain the core mechanism — what makes it work.]
+We propose a Clinical Trial Risk Monitor that compares patient records with clinical trial protocol requirements to identify and classify protocol deviations. The system assesses site-level risk, highlights potential issues, and generates reports with recommended corrective and preventive actions (CAPA) to help risk managers address problems before audits.
 
 ---
 
 ## ✨ Key Features
 
-- **Feature 1:** [Brief description — e.g., "Real-time anomaly detection using watsonx.ai"]
-- **Feature 2:** [Brief description]
-- **Feature 3:** [Brief description]
-- **Feature 4:** [Optional]
-- **Feature 5:** [Optional]
 
+## ✨ Key Features
+
+- **Feature 1: Protocol Deviation Detection** — Identifies missed visits, incorrect dosing, and prohibited medications by comparing patient records with protocol requirements.
+
+- **Feature 2: Deviation Severity Classification** — Classifies detected deviations as major, minor, or administrative.
+
+- **Feature 3: Site-Level Risk Scoring** — Assesses trial sites using deviation frequency and severity to highlight higher-risk sites.
+
+- **Feature 4: Risk Dashboard** — Displays detected deviations, site risk levels, and important risk indicators in an easy-to-understand format.
+
+- **Feature 5: CAPA Report Generation** — Generates reports with recommended corrective and preventive actions to help address identified issues.
 ---
 
 ## 🛠️ Tech Stack
