@@ -52,18 +52,23 @@ We propose a Clinical Trial Risk Monitor that compares patient records with clin
 ## 📁 Repository Structure
 
 ```
-├── src/                  # All source code
-├── docs/                 # Written documentation
-│   ├── problem-statement.md
-│   ├── solution-overview.md
-│   ├── architecture.md
-│   └── setup-guide.md
-├── demo/                 # Demo artifacts
-│   ├── screenshots/      # App screenshots
-│   └── demo-video-link.txt  # Link to demo video
-├── presentation/         # Slide deck
-└── submission.yaml       # Structured submission metadata
-```
+
+## 📁 Repository Structure
+
+```text
+bob-ai-hackathon/
+├── src/                     # Application source code
+├── docs/                    # Project documentation
+│   ├── problem-statement.md # Selected problem statement
+│   ├── solution-overview.md # Proposed solution
+│   ├── architecture.md      # System architecture
+│   └── setup-guide.md       # Setup instructions
+├── demo/                    # Demo materials
+│   ├── screenshots/         # Application screenshots
+│   └── demo-video-link.txt  # Demo video link
+├── presentation/             # Presentation slides
+├── submission.yaml           # Submission information
+└── README.md                 # Project overview
 
 ---
 
