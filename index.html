@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Clinical Trial Risk Monitor</title>
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system, "Segoe UI", system-ui, sans-serif;
+      background: #f0f4f8;
+      color: #1f2328;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    /* ── Top Nav ──────────────────────────────────────────────────── */
+    header {
+      background: #1e3a5f;
+      color: #fff;
+      padding: 0 28px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 56px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 6px rgba(0,0,0,.25);
+    }
+    header h1 { font-size: 18px; font-weight: 600; letter-spacing: .3px; }
+    header span { font-size: 12px; opacity: .75; }
+
+    /* ── Layout ───────────────────────────────────────────────────── */
+    main { max-width: 1100px; margin: 28px auto; padding: 0 20px 60px; }
+
+    /* ── Section headings ─────────────────────────────────────────── */
+    .section-title {
+      font-size: 13px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: .8px;
+      color: #57606a;
+      margin: 32px 0 12px;
+    }
+
+    /* ── KPI Cards ────────────────────────────────────────────────── */
+    .kpi-row {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+      gap: 14px;
+    }
+    .kpi-card {
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 18px 20px;
+    }
+    .kpi-card .label { font-size: 12px; color: #57606a; margin-bottom: 6px; }
+    .kpi-card .value { font-size: 30px; font-weight: 700; }
+    .kpi-card .sub   { font-size: 12px; color: #57606a; margin-top: 4px; }
+    .kpi-card.red    .value { color: #dc2626; }
+    .kpi-card.amber  .value { color: #d97706; }
+    .kpi-card.green  .value { color: #16a34a; }
+    .kpi-card.blue   .value { color: #2563eb; }
+
+    /* ── Filter bar ───────────────────────────────────────────────── */
+    .filter-bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 14px;
+    }
+    .filter-bar select, .filter-bar input {
+      padding: 6px 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 6px;
+      font-size: 13px;
+      background: #fff;
+    }
+
+    /* ── Patient Table ────────────────────────────────────────────── */
+    .table-wrap {
+      overflow-x: auto;
+      background: #fff;
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+    }
+    table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    thead th {
+      background: #f7f8fa;
+      text-align: left;
+      padding: 10px 14px;
+      font-weight: 600;
+      color: #374151;
+      border-bottom: 1px solid #e5e7eb;
+      white-space: nowrap;
+    }
+    tbody tr { border-bottom: 1px solid #f0f4f8; transition: background .12s; }
+    tbody tr:last-child { border-bottom: none; }
+    tbody tr:hover { background: #f7f8fa; }
+    tbody td { padding: 10px 14px; vertical-align: top; }
+
+    /* ── Severity badges ──────────────────────────────────────────── */
+    .badge {
+      display: inline-block;
+      padding: 2px 9px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: .4px;
+    }
+    .badge.critical  { background: #fee2e2; color: #991b1b; }
+    .badge.major     { background: #fef3c7; color: #92400e; }
+    .badge.minor     { background: #dbeafe; color: #1e40af; }
+    .badge.none      { background: #f0fdf4; color: #166534; }
+    .badge.high      { background: #fee2e2; color: #991b1b; }
+    .badge.medium    { background: #fef3c7; color: #92400e; }
+    .badge.low       { background: #dbeafe; color: #1e40af; }
+
+    /* ── Deviation pills inside cells ────────────────────────────── */
+    .dev-pill {
+      display: inline-block;
+      background: #fef9c3;
+      border: 1px solid #fde047;
+      color: #713f12;
+      border-radius: 5px;
+      padding: 1px 7px;
+      font-size: 11px;
+      margin: 2px 2px 2px 0;
+    }
+
+    /* ── Site Risk Table ──────────────────────────────────────────── */
+    .risk-bar-wrap { width: 120px; background: #e5e7eb; border-radius: 4px; height: 8px; display: inline-block; vertical-align: middle; }
+    .risk-bar      { height: 8px; border-radius: 4px; }
+    .risk-score    { font-weight: 700; margin-right: 8px; }
+
+    /* ── Detail panel (modal-like) ────────────────────────────────── */
+    #detail-overlay {
+      display: none;
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,.4);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    #detail-overlay.open { display: flex; }
+    #detail-panel {
+      background: #fff;
+      border-radius: 12px;
+      padding: 28px 32px;
+      max-width: 500px;
+      width: 90%;
+      position: relative;
+      box-shadow: 0 8px 32px rgba(0,0,0,.18);
+    }
+    #detail-panel h2 { font-size: 17px; margin-bottom: 16px; color: #1e3a5f; }
+    #detail-panel table { font-size: 13px; width: 100%; }
+    #detail-panel td { padding: 5px 8px; }
+    #detail-panel td:first-child { font-weight: 600; color: #57606a; width: 160px; }
+    .close-btn {
+      position: absolute; top: 14px; right: 16px;
+      background: none; border: none; font-size: 20px;
+      cursor: pointer; color: #57606a;
+    }
+    .close-btn:hover { color: #dc2626; }
+  </style>
+</head>
+<body>
+
+<!-- ── Navigation ──────────────────────────────────────────────────── -->
+<header>
+  <h1>🧬 Clinical Trial Risk Monitor</h1>
+  <span>Protocol Deviation Detector · P1 Hackathon Demo</span>
+</header>
+
+<!-- ── Main ────────────────────────────────────────────────────────── -->
+<main>
+
+  <!-- KPI Row -->
+  <p class="section-title">Dashboard Overview</p>
+  <div class="kpi-row" id="kpi-row"></div>
+
+  <!-- Patient Visit Records -->
+  <p class="section-title">Patient Visit Records</p>
+
+  <div class="filter-bar">
+    <input  id="search"         type="text"   placeholder="🔍  Search patient / site…" oninput="renderTable()" />
+    <select id="filter-severity"              onchange="renderTable()">
+      <option value="">All Severities</option>
+      <option value="critical">Critical</option>
+      <option value="major">Major</option>
+      <option value="minor">Minor</option>
+      <option value="none">No Deviation</option>
+    </select>
+    <select id="filter-site" onchange="renderTable()">
+      <option value="">All Sites</option>
+    </select>
+  </div>
+
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Patient ID</th>
+          <th>Site</th>
+          <th>Visit Date</th>
+          <th>Visit Type</th>
+          <th>Protocol Deviations</th>
+          <th>Severity</th>
+          <th>Details</th>
+        </tr>
+      </thead>
+      <tbody id="patient-tbody"></tbody>
+    </table>
+  </div>
+
+  <!-- Site Risk Table -->
+  <p class="section-title">Site-Level Risk Indicators</p>
+  <div class="table-wrap">
+    <table>
+      <thead>
+        <tr>
+          <th>Site</th>
+          <th>Total Visits</th>
+          <th>Deviations</th>
+          <th>Critical</th>
+          <th>Major</th>
+          <th>Risk Score</th>
+          <th>Risk Level</th>
+        </tr>
+      </thead>
+      <tbody id="site-tbody"></tbody>
+    </table>
+  </div>
+
+</main>
+
+<!-- ── Detail Overlay ──────────────────────────────────────────────── -->
+<div id="detail-overlay" onclick="closeDetail(event)">
+  <div id="detail-panel">
+    <button class="close-btn" onclick="closeDetail()">✕</button>
+    <h2 id="dp-title">Patient Detail</h2>
+    <table id="dp-table"></table>
+  </div>
+</div>
+
+<!-- ── JavaScript ──────────────────────────────────────────────────── -->
+<script>
+// ─────────────────────────────────────────────────────────────────────
+// 1. FICTIONAL PATIENT DATA
+//    Each record represents one patient visit.
+//    "deviations" is an array of protocol issues found at that visit.
+// ─────────────────────────────────────────────────────────────────────
+const VISITS = [
+  { id:"PT-001", site:"Site A – Boston",   date:"2024-01-08", type:"Screening",    deviations:[],                                          notes:"All procedures completed per protocol." },
+  { id:"PT-002", site:"Site A – Boston",   date:"2024-01-15", type:"Baseline",     deviations:["Consent signed after procedure"],          notes:"Informed consent obtained post blood draw." },
+  { id:"PT-003", site:"Site B – Chicago",  date:"2024-01-20", type:"Week 4",       deviations:[],                                          notes:"Vitals within normal range." },
+  { id:"PT-004", site:"Site B – Chicago",  date:"2024-01-22", type:"Week 4",       deviations:["Missed ECG window","Incorrect dose given"], notes:"ECG performed 3 days late; dose error recorded." },
+  { id:"PT-005", site:"Site C – Houston",  date:"2024-02-01", type:"Screening",    deviations:["Eligibility criteria not verified"],        notes:"Inclusion criteria checklist incomplete." },
+  { id:"PT-006", site:"Site C – Houston",  date:"2024-02-05", type:"Baseline",     deviations:[],                                          notes:"Baseline labs normal." },
+  { id:"PT-007", site:"Site A – Boston",   date:"2024-02-10", type:"Week 8",       deviations:["Concomitant medication not recorded"],      notes:"Patient taking OTC ibuprofen, not logged." },
+  { id:"PT-008", site:"Site D – Miami",    date:"2024-02-12", type:"Week 4",       deviations:[],                                          notes:"Visit on time, no issues." },
+  { id:"PT-009", site:"Site D – Miami",    date:"2024-02-18", type:"Week 8",       deviations:["Sample processing delay > 2 hrs"],          notes:"Centrifuge malfunction caused delay." },
+  { id:"PT-010", site:"Site B – Chicago",  date:"2024-02-20", type:"Week 12",      deviations:["Incorrect dose given","Protocol amendment not implemented"], notes:"Site not updated on amendment v3." },
+  { id:"PT-011", site:"Site C – Houston",  date:"2024-02-25", type:"Week 4",       deviations:[],                                          notes:"Patient compliant." },
+  { id:"PT-012", site:"Site A – Boston",   date:"2024-03-01", type:"Week 12",      deviations:[],                                          notes:"Endpoint assessments complete." },
+  { id:"PT-013", site:"Site D – Miami",    date:"2024-03-05", type:"Screening",    deviations:["Consent signed after procedure","Eligibility criteria not verified"], notes:"Multiple consent issues flagged." },
+  { id:"PT-014", site:"Site E – Seattle",  date:"2024-03-08", type:"Baseline",     deviations:[],                                          notes:"No deviations noted." },
+  { id:"PT-015", site:"Site E – Seattle",  date:"2024-03-12", type:"Week 4",       deviations:["Missed ECG window"],                        notes:"ECG window missed by 5 days." },
+  { id:"PT-016", site:"Site B – Chicago",  date:"2024-03-15", type:"Week 16",      deviations:["Incorrect dose given"],                     notes:"Third dose error at this site." },
+  { id:"PT-017", site:"Site C – Houston",  date:"2024-03-18", type:"Week 8",       deviations:[],                                          notes:"All assessments on schedule." },
+  { id:"PT-018", site:"Site E – Seattle",  date:"2024-03-22", type:"Week 8",       deviations:["Concomitant medication not recorded"],      notes:"CRF incomplete for concomitant meds." },
+  { id:"PT-019", site:"Site A – Boston",   date:"2024-03-25", type:"Week 16",      deviations:[],                                          notes:"Patient completed end-of-study visit." },
+  { id:"PT-020", site:"Site D – Miami",    date:"2024-03-28", type:"Week 12",      deviations:["Protocol amendment not implemented","Missed ECG window"], notes:"Amendment v3 still not applied." },
+];
+
+// ─────────────────────────────────────────────────────────────────────
+// 2. DEVIATION SEVERITY RULES
+//    Each deviation type is mapped to a severity level.
+//    We pick the highest severity across all deviations in a visit.
+// ─────────────────────────────────────────────────────────────────────
+const DEVIATION_SEVERITY = {
+  "Incorrect dose given":                   "critical",
+  "Consent signed after procedure":         "critical",
+  "Eligibility criteria not verified":      "major",
+  "Protocol amendment not implemented":     "major",
+  "Missed ECG window":                      "minor",
+  "Sample processing delay > 2 hrs":        "minor",
+  "Concomitant medication not recorded":    "minor",
+};
+
+// Numeric weight for scoring: critical=3, major=2, minor=1
+const SEVERITY_WEIGHT = { critical: 3, major: 2, minor: 1 };
+
+// ─────────────────────────────────────────────────────────────────────
+// 3. CLASSIFY SEVERITY for a visit
+//    Returns the worst severity across all deviations, or "none".
+// ─────────────────────────────────────────────────────────────────────
+function classifySeverity(deviations) {
+  if (!deviations.length) return "none";
+  const order = ["critical", "major", "minor"];
+  for (const level of order) {
+    if (deviations.some(d => DEVIATION_SEVERITY[d] === level)) return level;
+  }
+  return "minor"; // fallback for unknown deviations
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// 4. COMPUTE SITE RISK SCORE
+//    Score = sum of weights of all deviations at the site.
+//    Risk level: ≥10 → High, ≥5 → Medium, else Low.
+// ─────────────────────────────────────────────────────────────────────
+function computeSiteRisks() {
+  const sites = {};
+  for (const v of VISITS) {
+    if (!sites[v.site]) sites[v.site] = { total:0, deviations:0, critical:0, major:0, minor:0, score:0 };
+    const s = sites[v.site];
+    s.total++;
+    s.deviations += v.deviations.length;
+    for (const d of v.deviations) {
+      const sev = DEVIATION_SEVERITY[d] || "minor";
+      s[sev]++;
+      s.score += SEVERITY_WEIGHT[sev] || 1;
+    }
+  }
+  return sites;
+}
+
+function riskLevel(score) {
+  if (score >= 10) return { label:"High",   cls:"high" };
+  if (score >= 5)  return { label:"Medium", cls:"medium" };
+  return               { label:"Low",    cls:"low" };
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// 5. RENDER KPI CARDS
+// ─────────────────────────────────────────────────────────────────────
+function renderKPIs() {
+  const total      = VISITS.length;
+  const withDev    = VISITS.filter(v => v.deviations.length > 0).length;
+  const criticals  = VISITS.filter(v => classifySeverity(v.deviations) === "critical").length;
+  const sites      = new Set(VISITS.map(v => v.site)).size;
+
+  const kpis = [
+    { label:"Total Visits",         value: total,     sub:"across all sites",         cls:"blue"  },
+    { label:"Visits with Deviations",value: withDev,   sub:`${Math.round(withDev/total*100)}% of total visits`, cls:"amber" },
+    { label:"Critical Deviations",  value: criticals, sub:"require immediate action",  cls:"red"   },
+    { label:"Active Sites",         value: sites,     sub:"sites enrolled",            cls:"green" },
+  ];
+
+  document.getElementById("kpi-row").innerHTML = kpis.map(k => `
+    <div class="kpi-card ${k.cls}">
+      <div class="label">${k.label}</div>
+      <div class="value">${k.value}</div>
+      <div class="sub">${k.sub}</div>
+    </div>
+  `).join("");
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// 6. POPULATE SITE FILTER DROPDOWN
+// ─────────────────────────────────────────────────────────────────────
+function populateSiteFilter() {
+  const sites = [...new Set(VISITS.map(v => v.site))].sort();
+  const sel = document.getElementById("filter-site");
+  sites.forEach(s => {
+    const opt = document.createElement("option");
+    opt.value = s; opt.textContent = s;
+    sel.appendChild(opt);
+  });
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// 7. RENDER PATIENT TABLE (with filters)
+// ─────────────────────────────────────────────────────────────────────
+function renderTable() {
+  const searchVal  = document.getElementById("search").value.toLowerCase();
+  const sevFilter  = document.getElementById("filter-severity").value;
+  const siteFilter = document.getElementById("filter-site").value;
+
+  const filtered = VISITS.filter(v => {
+    const sev = classifySeverity(v.deviations);
+    const matchSearch = v.id.toLowerCase().includes(searchVal) ||
+                        v.site.toLowerCase().includes(searchVal);
+    const matchSev    = !sevFilter  || sev === sevFilter;
+    const matchSite   = !siteFilter || v.site === siteFilter;
+    return matchSearch && matchSev && matchSite;
+  });
+
+  const tbody = document.getElementById("patient-tbody");
+  if (!filtered.length) {
+    tbody.innerHTML = `<tr><td colspan="7" style="text-align:center;padding:24px;color:#57606a;">No records match the current filters.</td></tr>`;
+    return;
+  }
+
+  tbody.innerHTML = filtered.map((v, i) => {
+    const sev   = classifySeverity(v.deviations);
+    const pills = v.deviations.map(d => `<span class="dev-pill">${d}</span>`).join("") || `<span style="color:#57606a;font-size:12px;">—</span>`;
+    return `
+      <tr>
+        <td><strong>${v.id}</strong></td>
+        <td>${v.site}</td>
+        <td>${v.date}</td>
+        <td>${v.type}</td>
+        <td>${pills}</td>
+        <td><span class="badge ${sev}">${sev}</span></td>
+        <td><button onclick="openDetail('${v.id}')"
+              style="background:#1e3a5f;color:#fff;border:none;border-radius:6px;
+                     padding:4px 11px;font-size:12px;cursor:pointer;">View</button></td>
+      </tr>`;
+  }).join("");
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// 8. RENDER SITE RISK TABLE
+// ─────────────────────────────────────────────────────────────────────
+function renderSiteRisks() {
+  const sites  = computeSiteRisks();
+  const maxScore = Math.max(...Object.values(sites).map(s => s.score), 1);
+  const tbody = document.getElementById("site-tbody");
+
+  tbody.innerHTML = Object.entries(sites)
+    .sort((a, b) => b[1].score - a[1].score)
+    .map(([name, s]) => {
+      const rl    = riskLevel(s.score);
+      const pct   = Math.round((s.score / maxScore) * 100);
+      const color = rl.cls === "high" ? "#dc2626" : rl.cls === "medium" ? "#d97706" : "#16a34a";
+      return `
+        <tr>
+          <td><strong>${name}</strong></td>
+          <td>${s.total}</td>
+          <td>${s.deviations}</td>
+          <td>${s.critical}</td>
+          <td>${s.major}</td>
+          <td>
+            <span class="risk-score" style="color:${color}">${s.score}</span>
+            <span class="risk-bar-wrap">
+              <span class="risk-bar" style="width:${pct}%;background:${color};display:block;"></span>
+            </span>
+          </td>
+          <td><span class="badge ${rl.cls}">${rl.label}</span></td>
+        </tr>`;
+    }).join("");
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// 9. DETAIL PANEL (modal)
+// ─────────────────────────────────────────────────────────────────────
+function openDetail(patientId) {
+  const v   = VISITS.find(x => x.id === patientId);
+  if (!v) return;
+  const sev = classifySeverity(v.deviations);
+
+  document.getElementById("dp-title").textContent = `Patient ${v.id} — Visit Detail`;
+  document.getElementById("dp-table").innerHTML = `
+    <tr><td>Site</td><td>${v.site}</td></tr>
+    <tr><td>Visit Date</td><td>${v.date}</td></tr>
+    <tr><td>Visit Type</td><td>${v.type}</td></tr>
+    <tr><td>Severity</td><td><span class="badge ${sev}">${sev}</span></td></tr>
+    <tr><td>Deviations</td><td>${v.deviations.length ? v.deviations.map(d=>`<div class="dev-pill">${d}</div>`).join("") : "None"}</td></tr>
+    <tr><td>Notes</td><td style="font-style:italic;color:#57606a;">${v.notes}</td></tr>
+  `;
+  document.getElementById("detail-overlay").classList.add("open");
+}
+
+function closeDetail(e) {
+  // Close if clicking the overlay background or the ✕ button
+  if (!e || e.target === document.getElementById("detail-overlay") || e.currentTarget.classList.contains("close-btn") || !e.target) {
+    document.getElementById("detail-overlay").classList.remove("open");
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────
+// 10. INIT — run everything on page load
+// ─────────────────────────────────────────────────────────────────────
+renderKPIs();
+populateSiteFilter();
+renderTable();
+renderSiteRisks();
+</script>
+</body>
+</html>
