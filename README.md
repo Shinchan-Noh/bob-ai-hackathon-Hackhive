@@ -51,13 +51,14 @@ We propose a Clinical Trial Risk Monitor that compares patient records with clin
 
 ## 🛠️ Tech Stack
 
+
+## 🛠️ Tech Stack
+
 | Category | Technologies |
 |---|---|
-| **Languages** | [e.g., Python, TypeScript] |
-| **Frameworks** | [e.g., FastAPI, React] |
-| **IBM Technologies** | [e.g., watsonx.ai, IBM Bob, IBM Cloud] |
-| **Databases** | [e.g., PostgreSQL, Redis] |
-| **Other** | [e.g., Docker, GitHub Actions] |
+| Languages | HTML |
+| IBM Technologies | IBM Bob |
+| Other | Git, GitHub |
 
 ---
 
