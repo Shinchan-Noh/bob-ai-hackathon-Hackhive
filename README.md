@@ -6,7 +6,7 @@
 
 | Field | Value |
 |---|---|
-| **Team Name** | [Your Team Name] |
+| **Team Name** | [Hackhive] |
 | **Track** | [AI / DevOps / Sustainability / Open] |
 | **Team Lead** | Aastha — aasthavasava45@gmail.com |
 | **Members** | Darshit, Vanshika, Tanvi |
