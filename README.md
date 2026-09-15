@@ -83,7 +83,7 @@ bob-ai-hackathon/
 1. Clone the repository:
 
    ```bash
-   git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY.git
+   https://github.com/Shinchan-Noh/bob-ai-hackathon-Hackhive.git
    ```
 
 2. Open the project folder.
