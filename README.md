@@ -1,6 +1,4 @@
-# 🚀 [Your Project Title Here]
-
-> ⚠️ **Replace everything in `[ ]` brackets with your actual content before submission.**
+# 🚀 Clinical Trial Risk Monitor & Protocol Deviation Detector
 
 ---
 
@@ -10,14 +8,14 @@
 |---|---|
 | **Team Name** | [Your Team Name] |
 | **Track** | [AI / DevOps / Sustainability / Open] |
-| **Team Lead** | [Name] — [email@ibm.com] |
-| **Members** | [Name 1], [Name 2], [Name 3] |
+| **Team Lead** | Aastha — aasthavasava45@gmail.com |
+| **Members** | Darshit, Vanshika, Tanvi |
 
 ---
 
 ## 🎯 Problem Statement
 
-> In 2–3 sentences: What problem does your project solve? Who experiences this problem?
+
 
 [Describe the real-world problem your project addresses. Be specific about who the user is and what pain point they face.]
 
