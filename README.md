@@ -65,40 +65,48 @@ We propose a Clinical Trial Risk Monitor that compares patient records with clin
 ## 📁 Repository Structure
 
 ```
-├── src/                  # All source code
-├── docs/                 # Written documentation
-│   ├── problem-statement.md
-│   ├── solution-overview.md
-│   ├── architecture.md
-│   └── setup-guide.md
-├── demo/                 # Demo artifacts
-│   ├── screenshots/      # App screenshots
-│   └── demo-video-link.txt  # Link to demo video
-├── presentation/         # Slide deck
-└── submission.yaml       # Structured submission metadata
-```
 
+## 📁 Repository Structure
+
+```text
+bob-ai-hackathon/
+├── src/                     # Application source code
+├── docs/                    # Project documentation
+│   ├── problem-statement.md # Selected problem statement
+│   ├── solution-overview.md # Proposed solution
+│   ├── architecture.md      # System architecture
+│   └── setup-guide.md       # Setup instructions
+├── demo/                    # Demo materials
+│   ├── screenshots/         # Application screenshots
+│   └── demo-video-link.txt  # Demo video link
+├── presentation/             # Presentation slides
+├── submission.yaml           # Submission information
+└── README.md                 # Project overview
+```
 ---
 
 ## ⚡ How to Run
 
-> **Copy these exact steps from your [`docs/setup-guide.md`](docs/setup-guide.md)**
+### Prerequisites
+- A web browser
+- Git (optional)
 
-```bash
-# 1. Clone the repo
-git clone https://github.com/[your-repo].git
-cd [your-repo]
+### Steps
 
-# 2. Install dependencies
-[your install command here]
+1. Clone the repository:
 
-# 3. Configure environment
-cp .env.example .env
-# Edit .env with your values
+   ```bash
+   git clone https://github.com/Shinchan-Noh/YOUR-REPOSITORY.git
+   ```
 
-# 4. Run the project
-[your run command here]
-```
+2. Open the project folder.
+
+3. Navigate to the `src` folder.
+
+4. Open `index.html` in your web browser.
+
+5. Explore the application and its features.
+
 
 ---
 
@@ -108,7 +116,15 @@ cp .env.example .env
 |---|---|
 | 📹 Demo Video | [See demo/demo-video-link.txt](demo/demo-video-link.txt) |
 | 🌐 Live Demo | [See demo/live-demo-url.txt](demo/live-demo-url.txt) |
-| 🖼️ Screenshots | [See demo/screenshots/](demo/screenshots/) |
+| 🖼️ Screenshots | [See demo/screenshots/](demo/
+## ⚡ How to Run
+
+### Prerequisites
+
+
+### Steps
+
+
 | 📊 Presentation | [See presentation/slides.pdf](presentation/) |
 
 ---
