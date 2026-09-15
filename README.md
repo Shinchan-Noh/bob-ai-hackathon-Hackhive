@@ -74,23 +74,25 @@ bob-ai-hackathon/
 
 ## ⚡ How to Run
 
-> **Copy these exact steps from your [`docs/setup-guide.md`](docs/setup-guide.md)**
+### Prerequisites
+- A web browser
+- Git (optional)
 
-```bash
-# 1. Clone the repo
-git clone https://github.com/[your-repo].git
-cd [your-repo]
+### Steps
 
-# 2. Install dependencies
-[your install command here]
+1. Clone the repository:
 
-# 3. Configure environment
-cp .env.example .env
-# Edit .env with your values
+   ```bash
+   git clone https://github.com/YOUR-USERNAME/YOUR-REPOSITORY.git
+   ```
 
-# 4. Run the project
-[your run command here]
-```
+2. Open the project folder.
+
+3. Navigate to the `src` folder.
+
+4. Open `index.html` in your web browser.
+
+5. Explore the application and its features.
 
 ---
 
