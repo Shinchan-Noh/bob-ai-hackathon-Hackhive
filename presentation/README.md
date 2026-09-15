@@ -8,7 +8,7 @@ Place your slide deck in this folder.
   slides.pptx     ← Acceptable
   slides.key      ← Acceptable (macOS Keynote)
 
-Rename your file to `slides.pdf` (or `slides.pptx`) so the evaluation
+Rename your file to `Ppt.pdf` so the evaluation
 pipeline can locate it reliably.
 
 ## Recommended Slide Structure (5–8 slides)
